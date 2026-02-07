@@ -17,13 +17,6 @@
   # Determinate Nix manages the daemon, so don't let nix-darwin fight it
   nix.enable = false;
 
-  # macOS system defaults
-  system.defaults = {
-    dock.autohide = true;
-    finder.AppleShowAllExtensions = true;
-    NSGlobalDomain.AppleShowAllExtensions = true;
-  };
-
   # Allow unfree packages
   nixpkgs.config.allowUnfree = true;
 
