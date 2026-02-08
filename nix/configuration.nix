@@ -26,6 +26,24 @@
   # Required for per-user system.defaults options
   system.primaryUser = "nishraptor";
 
+  # Remap "Screenshot area to clipboard" to Ctrl+Shift+S
+  # Key 31 = screenshot area to clipboard
+  # Parameters: [ASCII code, key code, modifier flags]
+  # 115 = 's', 1 = key code for S, 393216 = Ctrl(262144) + Shift(131072)
+  system.defaults.CustomUserPreferences = {
+    "com.apple.symbolichotkeys" = {
+      AppleSymbolicHotKeys = {
+        "31" = {
+          enabled = true;
+          value = {
+            parameters = [ 115 1 393216 ];
+            type = "standard";
+          };
+        };
+      };
+    };
+  };
+
   # Required: used for backwards compat. Don't change.
   system.stateVersion = 6;
 }
