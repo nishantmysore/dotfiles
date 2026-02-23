@@ -26,6 +26,12 @@
   # Required for per-user system.defaults options
   system.primaryUser = "nishraptor";
 
+  # Show the Dock (don't auto-hide)
+  system.defaults.dock.autohide = false;
+
+  # Hide file extensions in Finder
+  system.defaults.finder.AppleShowAllExtensions = false;
+
   # Remap "Screenshot area to clipboard" to Ctrl+Shift+S
   # Key 31 = screenshot area to clipboard
   # Parameters: [ASCII code, key code, modifier flags]

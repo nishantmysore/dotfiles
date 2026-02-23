@@ -9,6 +9,7 @@
   home.packages = with pkgs; [
     bat
     eza
+    glow
     neovim
     uv
     clang-tools
@@ -21,6 +22,7 @@
 
   # Claude Code configuration
   home.file.".claude/settings.json".text = builtins.toJSON {
+    model = "claude-opus-4-6";
     enabledPlugins = {
       "clangd-lsp@claude-plugins-official" = true;
       "pyright-lsp@claude-plugins-official" = true;
@@ -190,6 +192,7 @@
         confirm_os_window_close = 0;
         scrollback_lines = 10000;
         strip_trailing_spaces = "smart";
+        allow_remote_control = "yes";
         macos_option_as_alt = "yes";
         macos_traditional_fullscreen = false;
       };
