@@ -30,6 +30,7 @@
   system.defaults.dock.autohide = false;
 
   # Hide file extensions in Finder
+  system.defaults.NSGlobalDomain.AppleShowAllExtensions = false;
   system.defaults.finder.AppleShowAllExtensions = false;
 
   # Remap "Screenshot area to clipboard" to Ctrl+Shift+S

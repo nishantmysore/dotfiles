@@ -22,7 +22,7 @@
 
   # Claude Code configuration
   home.file.".claude/settings.json".text = builtins.toJSON {
-    model = "claude-opus-4-6";
+    model = "claude-opus-4-6[1m]";
     enabledPlugins = {
       "clangd-lsp@claude-plugins-official" = true;
       "pyright-lsp@claude-plugins-official" = true;
@@ -151,6 +151,10 @@
     direnv = {
       enable = true;
       nix-direnv.enable = true;
+      package = pkgs.direnv.overrideAttrs (old: {
+        env = (old.env or { }) // { CGO_ENABLED = "1"; };
+        ldflags = builtins.filter (f: f != "-linkmode=external") (old.ldflags or [ ]);
+      });
     };
 
     zoxide = {
