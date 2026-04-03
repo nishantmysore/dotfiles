@@ -26,9 +26,18 @@
           home-manager.useGlobalPkgs = true;
           home-manager.useUserPackages = true;
           home-manager.backupFileExtension = "backup";
-          home-manager.users.nishraptor = import ./home.nix;
+          home-manager.users.nishraptor = import ./home-darwin.nix;
         }
       ];
+    };
+
+    homeConfigurations."nishant@nishraptorserver" = home-manager.lib.homeManagerConfiguration {
+      pkgs = import nixpkgs {
+        system = "x86_64-linux";
+        config.allowUnfree = true;
+        overlays = [ claude-code.overlays.default ];
+      };
+      modules = [ ./home-linux.nix ];
     };
   };
 }
