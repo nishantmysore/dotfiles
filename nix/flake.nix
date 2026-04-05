@@ -13,9 +13,14 @@
     claude-code = {
       url = "github:sadjow/claude-code-nix";
     };
+    disko = {
+      url = "github:nix-community/disko";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
-  outputs = { self, nixpkgs, nix-darwin, home-manager, claude-code }:
+  outputs = { self, nixpkgs, nix-darwin, home-manager, claude-code, disko }:
   {
+    # macOS (MacBook Pro)
     darwinConfigurations."Nishants-MacBook-Pro" = nix-darwin.lib.darwinSystem {
       system = "aarch64-darwin";
       modules = [
@@ -31,13 +36,21 @@
       ];
     };
 
-    homeConfigurations."nishant@nishraptorserver" = home-manager.lib.homeManagerConfiguration {
-      pkgs = import nixpkgs {
-        system = "x86_64-linux";
-        config.allowUnfree = true;
-        overlays = [ claude-code.overlays.default ];
-      };
-      modules = [ ./home-linux.nix ];
+    # NixOS (server)
+    nixosConfigurations."nishraptorserver" = nixpkgs.lib.nixosSystem {
+      system = "x86_64-linux";
+      modules = [
+        disko.nixosModules.disko
+        ./nixos-configuration.nix
+        home-manager.nixosModules.home-manager
+        {
+          nixpkgs.overlays = [ claude-code.overlays.default ];
+          home-manager.useGlobalPkgs = true;
+          home-manager.useUserPackages = true;
+          home-manager.backupFileExtension = "backup";
+          home-manager.users.nishant = import ./home-linux.nix;
+        }
+      ];
     };
   };
 }
