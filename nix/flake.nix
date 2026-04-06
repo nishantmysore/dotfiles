@@ -31,13 +31,20 @@
       ];
     };
 
-    homeConfigurations."nishant@nishraptorserver" = home-manager.lib.homeManagerConfiguration {
-      pkgs = import nixpkgs {
-        system = "x86_64-linux";
-        config.allowUnfree = true;
-        overlays = [ claude-code.overlays.default ];
-      };
-      modules = [ ./home-linux.nix ];
+    nixosConfigurations."nishraptorserver" = nixpkgs.lib.nixosSystem {
+      system = "x86_64-linux";
+      modules = [
+        ./hardware-configuration-server.nix
+        ./nixos-server.nix
+        home-manager.nixosModules.home-manager
+        {
+          nixpkgs.overlays = [ claude-code.overlays.default ];
+          home-manager.useGlobalPkgs = true;
+          home-manager.useUserPackages = true;
+          home-manager.backupFileExtension = "backup";
+          home-manager.users.nishant = import ./home-linux.nix;
+        }
+      ];
     };
   };
 }
