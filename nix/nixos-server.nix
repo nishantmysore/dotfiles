@@ -54,7 +54,7 @@
   };
 
   # Firewall
-  networking.firewall.allowedTCPPorts = [ 8123 ];
+  networking.firewall.allowedTCPPorts = [ 8123 21064 ];
 
   # Allow unfree packages
   nixpkgs.config.allowUnfree = true;
