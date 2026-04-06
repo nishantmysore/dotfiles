@@ -25,7 +25,7 @@
   # User account
   users.users.nishant = {
     isNormalUser = true;
-    extraGroups = [ "wheel" "networkmanager" ];
+    extraGroups = [ "wheel" "networkmanager" "docker" ];
     shell = pkgs.fish;
     openssh.authorizedKeys.keys = [
       "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIHwtRheBIL0sgGv+Y0uL7ndgvqUtAc0mSwb4r4qx+9aN nishraptor@Nishants-MacBook-Pro"
@@ -39,6 +39,17 @@
       PermitRootLogin = "no";
       PasswordAuthentication = false;
     };
+  };
+
+  # Docker
+  virtualisation.docker.enable = true;
+
+  # Home Assistant
+  virtualisation.oci-containers.containers.home-assistant = {
+    image = "ghcr.io/home-assistant/home-assistant:stable";
+    volumes = [ "/var/lib/home-assistant:/config" ];
+    extraOptions = [ "--network=host" "--privileged" ];
+    environment.TZ = "America/Los_Angeles";
   };
 
   # Allow unfree packages
