@@ -53,6 +53,9 @@
     environment.TZ = "America/Los_Angeles";
   };
 
+  # Firewall
+  networking.firewall.allowedTCPPorts = [ 8123 ];
+
   # Allow unfree packages
   nixpkgs.config.allowUnfree = true;
 
