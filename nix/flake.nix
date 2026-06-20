@@ -15,36 +15,69 @@
     };
   };
   outputs = { self, nixpkgs, nix-darwin, home-manager, claude-code }:
+  let
+    darwinHost = { name, homeModule, system ? "aarch64-darwin", extraModules ? [ ] }:
+      nix-darwin.lib.darwinSystem {
+        inherit system;
+        specialArgs = { hostName = name; };
+        modules = [
+          ./configuration.nix
+          home-manager.darwinModules.home-manager
+          {
+            nixpkgs.overlays = [ claude-code.overlays.default ];
+            home-manager.useGlobalPkgs = true;
+            home-manager.useUserPackages = true;
+            home-manager.backupFileExtension = "backup";
+            home-manager.users."nishant.mysore" = import homeModule;
+          }
+        ] ++ extraModules;
+      };
+
+    nixosHost = { system ? "x86_64-linux" }:
+      nixpkgs.lib.nixosSystem {
+        inherit system;
+        modules = [
+          ./hardware-configuration-server.nix
+          ./nixos-server.nix
+          home-manager.nixosModules.home-manager
+          {
+            nixpkgs.overlays = [ claude-code.overlays.default ];
+            home-manager.useGlobalPkgs = true;
+            home-manager.useUserPackages = true;
+            home-manager.backupFileExtension = "backup";
+            home-manager.users.nishant = import ./home-linux.nix;
+          }
+        ];
+      };
+  in
   {
-    darwinConfigurations."nishants-air" = nix-darwin.lib.darwinSystem {
-      system = "aarch64-darwin";
-      modules = [
-        ./configuration.nix
-        home-manager.darwinModules.home-manager
-        {
-          nixpkgs.overlays = [ claude-code.overlays.default ];
-          home-manager.useGlobalPkgs = true;
-          home-manager.useUserPackages = true;
-          home-manager.backupFileExtension = "backup";
-          home-manager.users."nishant.mysore" = import ./home-darwin.nix;
-        }
-      ];
+    darwinConfigurations = {
+      personal-mac = darwinHost {
+        name = "personal-mac";
+        homeModule = ./home-personal-mac.nix;
+      };
+
+      work-macbook = darwinHost {
+        name = "work-macbook";
+        homeModule = ./home-work-macbook.nix;
+        extraModules = [
+          {
+            nixpkgs = {
+              config.segger-jlink.acceptLicense = true;
+              overlays = [
+                (final: prev: {
+                  arm-toolchain-for-embedded = final.callPackage ./pkgs/arm-toolchain-for-embedded.nix { };
+                })
+              ];
+            };
+          }
+        ];
+      };
     };
 
-    nixosConfigurations."nishraptorserver" = nixpkgs.lib.nixosSystem {
-      system = "x86_64-linux";
-      modules = [
-        ./hardware-configuration-server.nix
-        ./nixos-server.nix
-        home-manager.nixosModules.home-manager
-        {
-          nixpkgs.overlays = [ claude-code.overlays.default ];
-          home-manager.useGlobalPkgs = true;
-          home-manager.useUserPackages = true;
-          home-manager.backupFileExtension = "backup";
-          home-manager.users.nishant = import ./home-linux.nix;
-        }
-      ];
+    nixosConfigurations = {
+      server = nixosHost { };
+      nishraptorserver = nixosHost { };
     };
   };
 }

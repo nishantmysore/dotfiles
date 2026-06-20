@@ -1,4 +1,4 @@
-{ config, pkgs, ... }:
+{ config, pkgs, hostName, ... }:
 
 {
   # System-wide packages (user packages go in home.nix)
@@ -10,11 +10,21 @@
   # Use Fish as default shell (managed by nix, not homebrew)
   programs.fish.enable = true;
   programs.fish.shellInit = ''
-    fish_add_path --prepend --move /etc/profiles/per-user/$USER/bin /run/current-system/sw/bin
+    if test -e /nix/var/nix/profiles/default/etc/profile.d/nix-daemon.fish
+      source /nix/var/nix/profiles/default/etc/profile.d/nix-daemon.fish
+    end
+
+    fish_add_path --prepend --move /nix/var/nix/profiles/default/bin /etc/profiles/per-user/$USER/bin /run/current-system/sw/bin /usr/local/bin /usr/bin /bin /usr/sbin /sbin
   '';
   environment.variables.PATH = [
+    "/nix/var/nix/profiles/default/bin"
     "/etc/profiles/per-user/${config.system.primaryUser}/bin"
     "/run/current-system/sw/bin"
+    "/usr/local/bin"
+    "/usr/bin"
+    "/bin"
+    "/usr/sbin"
+    "/sbin"
   ];
   environment.shells = [ pkgs.fish ];
   users.users."nishant.mysore".shell = pkgs.fish;
@@ -26,10 +36,21 @@
   nixpkgs.config.allowUnfree = true;
 
   # Hostname
-  networking.hostName = "nishants-air";
+  networking.hostName = hostName;
 
   # Required for per-user system.defaults options
   system.primaryUser = "nishant.mysore";
+
+  system.activationScripts.setPrimaryUserShell.text = ''
+    echo "setting ${config.system.primaryUser} shell to fish..." >&2
+    targetShell="/run/current-system/sw/bin/fish"
+    currentShell="$(dscl . -read /Users/${config.system.primaryUser} UserShell 2>/dev/null || true)"
+    currentShell="''${currentShell#UserShell: }"
+
+    if [ "$currentShell" != "$targetShell" ]; then
+      dscl . -create /Users/${config.system.primaryUser} UserShell "$targetShell"
+    fi
+  '';
 
   # Show the Dock (don't auto-hide)
   system.defaults.dock.autohide = false;

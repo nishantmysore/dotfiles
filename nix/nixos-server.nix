@@ -21,6 +21,7 @@
 
   # Fish shell
   programs.fish.enable = true;
+  environment.shells = [ pkgs.fish ];
 
   # User account
   users.users.nishant = {

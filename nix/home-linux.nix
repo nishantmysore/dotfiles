@@ -7,5 +7,5 @@
   home.homeDirectory = "/home/nishant";
 
   # Linux-specific shell config
-  programs.fish.shellAliases.rebuild = "sudo nixos-rebuild switch --flake ~/nix#nishraptorserver";
+  programs.fish.shellAliases.rebuild = "sudo nixos-rebuild switch --flake ~/nix#server";
 }

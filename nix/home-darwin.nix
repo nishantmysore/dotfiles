@@ -6,6 +6,10 @@
   home.username = "nishant.mysore";
   home.homeDirectory = lib.mkForce "/Users/nishant.mysore";
 
+  home.packages = with pkgs; [
+    vscode
+  ];
+
   # macOS-specific direnv override
   programs.direnv.package = pkgs.direnv.overrideAttrs (old: {
     env = (old.env or { }) // { CGO_ENABLED = "1"; };
@@ -14,7 +18,6 @@
 
   # macOS-specific shell config
   programs.fish.shellAbbrs.work = "ssh -i ~/.ssh/gcp_x86_key Nishant@136.111.205.91";
-  programs.fish.shellAliases.rebuild = "sudo nix run github:LnL7/nix-darwin/master#darwin-rebuild -- switch --flake ~/Documents/dotfiles/nix#nishants-air";
 
   # Kitty terminal (macOS only)
   programs.kitty = {
@@ -27,6 +30,7 @@
     settings = {
       copy_on_select = "yes";
       enable_audio_bell = false;
+      shell = "/run/current-system/sw/bin/fish";
       window_margin_width = 10;
       tab_bar_style = "powerline";
       tab_powerline_style = "slanted";
