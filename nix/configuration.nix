@@ -1,9 +1,10 @@
-{ pkgs, ... }:
+{ config, pkgs, ... }:
 
 {
   # System-wide packages (user packages go in home.nix)
   environment.systemPackages = with pkgs; [
     fish
+    kitty
   ];
 
   # Use Fish as default shell (managed by nix, not homebrew)
@@ -11,8 +12,12 @@
   programs.fish.shellInit = ''
     fish_add_path --prepend --move /etc/profiles/per-user/$USER/bin /run/current-system/sw/bin
   '';
+  environment.variables.PATH = [
+    "/etc/profiles/per-user/${config.system.primaryUser}/bin"
+    "/run/current-system/sw/bin"
+  ];
   environment.shells = [ pkgs.fish ];
-  users.users.nishraptor.shell = pkgs.fish;
+  users.users."nishant.mysore".shell = pkgs.fish;
 
   # Determinate Nix manages the daemon, so don't let nix-darwin fight it
   nix.enable = false;
@@ -21,10 +26,10 @@
   nixpkgs.config.allowUnfree = true;
 
   # Hostname
-  networking.hostName = "Nishants-MacBook-Pro";
+  networking.hostName = "nishants-air";
 
   # Required for per-user system.defaults options
-  system.primaryUser = "nishraptor";
+  system.primaryUser = "nishant.mysore";
 
   # Show the Dock (don't auto-hide)
   system.defaults.dock.autohide = false;

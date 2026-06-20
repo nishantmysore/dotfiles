@@ -2,6 +2,9 @@
 
 {
   home.stateVersion = "24.11";
+  home.sessionPath = [
+    "$HOME/.local/bin"
+  ];
 
   # Packages managed per-user (CLI tools, etc.)
   home.packages = with pkgs; [
@@ -10,11 +13,14 @@
     glow
     neovim
     uv
+    pipx
+    cmake
     clang-tools
     devenv
     manix
     ninja
     yadm
+    codex
     pkgs.claude-code
   ];
 
@@ -96,6 +102,9 @@
     # Fish shell
     fish = {
       enable = true;
+      shellInit = ''
+        fish_add_path --append $HOME/.local/bin
+      '';
       shellAbbrs = {
         python = "python3";
       };

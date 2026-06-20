@@ -16,7 +16,7 @@
   };
   outputs = { self, nixpkgs, nix-darwin, home-manager, claude-code }:
   {
-    darwinConfigurations."Nishants-MacBook-Pro" = nix-darwin.lib.darwinSystem {
+    darwinConfigurations."nishants-air" = nix-darwin.lib.darwinSystem {
       system = "aarch64-darwin";
       modules = [
         ./configuration.nix
@@ -26,7 +26,7 @@
           home-manager.useGlobalPkgs = true;
           home-manager.useUserPackages = true;
           home-manager.backupFileExtension = "backup";
-          home-manager.users.nishraptor = import ./home-darwin.nix;
+          home-manager.users."nishant.mysore" = import ./home-darwin.nix;
         }
       ];
     };

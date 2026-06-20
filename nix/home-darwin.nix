@@ -3,8 +3,8 @@
 {
   imports = [ ./home-common.nix ];
 
-  home.username = "nishraptor";
-  home.homeDirectory = lib.mkForce "/Users/nishraptor";
+  home.username = "nishant.mysore";
+  home.homeDirectory = lib.mkForce "/Users/nishant.mysore";
 
   # macOS-specific direnv override
   programs.direnv.package = pkgs.direnv.overrideAttrs (old: {
@@ -14,7 +14,7 @@
 
   # macOS-specific shell config
   programs.fish.shellAbbrs.work = "ssh -i ~/.ssh/gcp_x86_key Nishant@136.111.205.91";
-  programs.fish.shellAliases.rebuild = "sudo /run/current-system/sw/bin/darwin-rebuild switch --flake ~/nix";
+  programs.fish.shellAliases.rebuild = "sudo nix run github:LnL7/nix-darwin/master#darwin-rebuild -- switch --flake ~/Documents/dotfiles/nix#nishants-air";
 
   # Kitty terminal (macOS only)
   programs.kitty = {
