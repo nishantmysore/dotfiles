@@ -26,7 +26,6 @@
 
   # Claude Code configuration
   home.file.".claude/settings.json".text = builtins.toJSON {
-    model = "claude-opus-4-6[1m]";
     enabledPlugins = {
       "clangd-lsp@claude-plugins-official" = true;
       "pyright-lsp@claude-plugins-official" = true;
