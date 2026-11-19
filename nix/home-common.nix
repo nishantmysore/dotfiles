@@ -20,6 +20,7 @@
     manix
     ninja
     yadm
+    tmux
     codex
     pkgs.claude-code
   ];
