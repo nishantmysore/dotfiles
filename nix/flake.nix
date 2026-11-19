@@ -16,10 +16,10 @@
   };
   outputs = { self, nixpkgs, nix-darwin, home-manager, claude-code }:
   let
-    darwinHost = { name, homeModule, system ? "aarch64-darwin", extraModules ? [ ] }:
+    darwinHost = { name, user, homeModule, system ? "aarch64-darwin", extraModules ? [ ] }:
       nix-darwin.lib.darwinSystem {
         inherit system;
-        specialArgs = { hostName = name; };
+        specialArgs = { hostName = name; primaryUser = user; };
         modules = [
           ./configuration.nix
           home-manager.darwinModules.home-manager
@@ -28,7 +28,7 @@
             home-manager.useGlobalPkgs = true;
             home-manager.useUserPackages = true;
             home-manager.backupFileExtension = "backup";
-            home-manager.users."nishant.mysore" = import homeModule;
+            home-manager.users.${user} = import homeModule;
           }
         ] ++ extraModules;
       };
@@ -54,11 +54,13 @@
     darwinConfigurations = {
       personal-mac = darwinHost {
         name = "personal-mac";
+        user = "nishraptor";
         homeModule = ./home-personal-mac.nix;
       };
 
       work-macbook = darwinHost {
         name = "work-macbook";
+        user = "nishant.mysore";
         homeModule = ./home-work-macbook.nix;
         extraModules = [
           {

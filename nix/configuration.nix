@@ -1,4 +1,4 @@
-{ config, pkgs, hostName, ... }:
+{ config, pkgs, hostName, primaryUser, ... }:
 
 {
   # System-wide packages (user packages go in home.nix)
@@ -27,7 +27,7 @@
     "/sbin"
   ];
   environment.shells = [ pkgs.fish ];
-  users.users."nishant.mysore".shell = pkgs.fish;
+  users.users.${primaryUser}.shell = pkgs.fish;
 
   # Determinate Nix manages the daemon, so don't let nix-darwin fight it
   nix.enable = false;
@@ -39,7 +39,7 @@
   networking.hostName = hostName;
 
   # Required for per-user system.defaults options
-  system.primaryUser = "nishant.mysore";
+  system.primaryUser = primaryUser;
 
   system.activationScripts.setPrimaryUserShell.text = ''
     echo "setting ${config.system.primaryUser} shell to fish..." >&2

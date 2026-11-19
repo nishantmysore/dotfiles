@@ -3,9 +3,6 @@
 {
   imports = [ ./home-common.nix ];
 
-  home.username = "nishant.mysore";
-  home.homeDirectory = lib.mkForce "/Users/nishant.mysore";
-
   home.packages = with pkgs; [
     vscode
   ];

@@ -22,6 +22,7 @@
     yadm
     tmux
     codex
+    google-cloud-sdk
     pkgs.claude-code
   ];
 
@@ -34,6 +35,10 @@
     statusLine = {
       type = "command";
       command = "~/.claude/statusline.sh";
+    };
+    attribution = {
+      commit = "";
+      pr = "";
     };
   };
 
