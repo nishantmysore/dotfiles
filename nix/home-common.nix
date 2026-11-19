@@ -22,7 +22,6 @@
     yadm
     tmux
     codex
-    google-cloud-sdk
     pkgs.claude-code
   ];
 
